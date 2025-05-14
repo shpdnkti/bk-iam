@@ -1,5 +1,5 @@
 /*
- * TencentBlueKing is pleased to support the open source community by making 蓝鲸智云-权限中心(BlueKing-IAM) available.
+ * TencentBlueKing is pleased to support the open source community by making 蓝鲸智云 - 权限中心 (BlueKing-IAM) available.
  * Copyright (C) 2017-2021 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at http://opensource.org/licenses/MIT
@@ -57,6 +57,17 @@ type LogConfig struct {
 	Settings map[string]string
 }
 
+// TLS ...
+type TLS struct {
+	Enabled     bool
+	CertCaFile  string
+	CertFile    string
+	CertKeyFile string
+	// for testing only, default false is secure;
+	// if set true will skip hostname verification, don't enable it in production
+	InsecureSkipVerify bool
+}
+
 // Database ...
 type Database struct {
 	ID       string
@@ -69,6 +80,9 @@ type Database struct {
 	MaxOpenConns          int
 	MaxIdleConns          int
 	ConnMaxLifetimeSecond int
+
+	// tls
+	TLS TLS
 }
 
 // Redis ...
@@ -89,6 +103,9 @@ type Redis struct {
 	SentinelAddr     string
 	MasterName       string
 	SentinelPassword string
+
+	// tls
+	TLS TLS
 }
 
 // Sentry ...
@@ -150,7 +167,7 @@ type Config struct {
 	SuperUser string
 	// 产品上支持接入系统配置屏蔽的功能
 	SupportShieldFeatures []string
-	// 安全app_code, 共享权限模型白名单, 并且可以作为各个系统合法clients调用权限相关接口
+	// 安全 app_code, 共享权限模型白名单，并且可以作为各个系统合法 clients 调用权限相关接口
 	SecurityAuditAppCode string
 
 	Worker Worker
@@ -181,7 +198,7 @@ type Config struct {
 	AuthToken string
 }
 
-// Load 从viper中读取配置文件
+// Load 从 viper 中读取配置文件
 func Load(v *viper.Viper) (*Config, error) {
 	var cfg Config
 	// 将配置信息绑定到结构体上
